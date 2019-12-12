@@ -5,15 +5,15 @@ def pearson(user1, user2):
     #     "artists": [
     #         {
     #             "name": "asd",
-    #             "listens": 78
+    #             "plays": 78
     #         },
     #         {
     #             "name": "ewq",
-    #             "listens": 50
+    #             "plays": 50
     #         },
     #         {
     #             "name": "dfg",
-    #             "listens": 23
+    #             "plays": 23
     #         },
     #     ]
     # }
@@ -22,11 +22,11 @@ def pearson(user1, user2):
     #     "artists": [
     #         {
     #             "name": "asd",
-    #             "listens": 78
+    #             "plays": 78
     #         },
     #         {
     #             "name": "dfg",
-    #             "listens": 23
+    #             "plays": 23
     #         }
     #     ]
     # }
@@ -55,8 +55,8 @@ def calculateSums(common, user1mean, user2mean):
     sumUser1 = 0
     sumUser2 = 0
     for i in common:
-        sum1 = (i[0]['listens'] - user1mean )
-        sum2 = (i[1]['listens'] - user2mean )
+        sum1 = (i[0]['plays'] - user1mean )
+        sum2 = (i[1]['plays'] - user2mean )
         sum = sum + (sum1 * sum2)
         sumUser1 = sumUser1 + (sum1**2)
         sumUser2 = sumUser2 + (sum2**2)
@@ -65,7 +65,7 @@ def calculateSums(common, user1mean, user2mean):
 def mean(user):
     sum = 0
     for i in user["artists"]:
-        sum = sum + i["listens"]
+        sum = sum + i["plays"]
 
     return sum/len(user["artists"])
 
