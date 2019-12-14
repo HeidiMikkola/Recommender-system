@@ -5,14 +5,14 @@ def load_data(filename):
         csv_reader = csv.reader(csv_file, delimiter='\t')
         users = {}
         for row in csv_reader:
-            if row[1] in users.keys():
-                users[row[1]]['artists'].append({
+            if row[0] in users.keys():
+                users[row[0]]['artists'].append({
                     "id": row[1],
                     "name": row[2],
                     "plays": int(row[3])
                 })
             else:
-                users[row[1]] = {
+                users[row[0]] = {
                     'artists': [{
                         "id": row[1],
                         "name": row[2],
