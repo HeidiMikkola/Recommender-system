@@ -1,29 +1,5 @@
-import csv
 import pearson
-
-def load_data(filename):
-    with open(filename) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter='\t')
-        users = []
-        last_user = ''
-        for row in csv_reader:
-            if row[0] == last_user:
-                users[len(users)-1]['artists'].append({
-                    "id": row[1],
-                    "name": row[2],
-                    "plays": int(row[3])
-                })
-            else:
-                last_user = row[0]
-                users.append({
-                    "id": row[0],
-                    "artists": [{
-                        "id": row[1],
-                        "name": row[2],
-                        "plays": int(row[3])
-                    }]
-                })
-        return users
+import csv_reader
 
 def farthest_close_neighbor(user):
     farthest = 100
@@ -59,7 +35,9 @@ def neighbors(data, n):
 def generate(data, options):
     neighbors(data, options["n_similar_users"])
     for i in range(10):
+        print("NAABURIT")
         print(data[i]["id"], data[i]["neighbors"])
+
     # print(data)
 
 
@@ -81,7 +59,7 @@ def generate(data, options):
 #     }
 # ]
 
-data = load_data("tools/shortest.tsv")
+data = csv_reader.load_data("tools/shortest.tsv")
 recommendations = generate(data, {
     "n_similar_users": 5
 })
