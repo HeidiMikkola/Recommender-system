@@ -44,7 +44,7 @@ def neighbors(data, n):
 def generate(data, options):
     neighbors(data, options["n_similar_users"])
     print("NAABURIT")
-    test_user = data[data.keys()[0]]
+    test_user = data[list(data.keys())[0]]
     print(test_user)
 
     
@@ -71,7 +71,7 @@ def generate(data, options):
 # ]
 
 data = csv_reader.load_data("tools/shortest.tsv")
-# print(data)
+csv_reader.load_groups('tools/profile.tsv', data)
 recommendations = generate(data, {
     "n_similar_users": 5
 })

@@ -1,7 +1,7 @@
 import csv
 
 def load_data(filename):
-    with open(filename) as csv_file:
+    with open(filename, encoding="utf8") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter='\t')
         users = {}
         for row in csv_reader:
@@ -22,5 +22,11 @@ def load_data(filename):
 
         return users
 
-def load_groups():
-    
+def load_groups(filename, users):
+    with open(filename, encoding="utf8") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter='\t')
+        for row in csv_reader:
+            if row[0] in users:
+                users[row[0]]['sex'] = row[1]
+                users[row[0]]['age'] = row[2]
+                users[row[0]]['country'] = row[3]
