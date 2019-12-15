@@ -72,14 +72,33 @@ def predictions(data, user, unseen):
     return predict
 
 
+# Generates recommendations for given user ids, sorts them by relevancy
+# options: 
+#   n_similar_users: int, how many closest neighbors are calculated
+#   sim_type: 'pearson' | 'jaccard', which similarity algorithm is used
+#   n_recommendations: int, how many best recommandations are returned
 def generate(data, users, options):
     neighbors(data, options["n_similar_users"], options["sim_type"])
     recommendations = {}
     for user_id in users:
         user = data[user_id]
-        pred = predictions(data, user, unseen_items(data, user))
+        pred = list(filter(lambda x : x['prediction'] > 0, predictions(data, user, unseen_items(data, user))))
         pred.sort(key = lambda x : x['prediction'], reverse = True)
-        recommendations[user_id] = pred 
-
+        recommendations[user_id] = pred[:options["n_recommendations"]]
     return recommendations
 
+
+def borda_count(users):
+    ranks = {}
+    # assume the recommendations are already sorted
+    for user_id, recommendations in users.items():
+        for i, artist in enumerate(recommendations):
+            if artist['id'] in ranks:
+                ranks[artist['id']]['rank'] += len(recommendations) - i
+            else:
+                ranks[artist['id']] = {
+                    **artist,
+                    'rank': len(recommendations) - i
+                }
+
+    return ranks

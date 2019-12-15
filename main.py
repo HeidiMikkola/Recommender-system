@@ -3,14 +3,19 @@ import recommender
 import grouper
 
 
+
 data = csv_reader.load_data("tools/shortest.tsv")
 csv_reader.load_profiles('tools/profile.tsv', data)
-group = grouper.get_group(data, 'Germany', 'f', 20, 30)
-# print(group)
-# ['00035a0368fd249d286f683e816fbdc97cbfa7d9']
+group = grouper.get_group(data, 'United States', 'f', 0, 100)
+
 recommendations = recommender.generate(data, group.keys(), {
     "n_similar_users": 5,
+    "n_recommendations": 5,
     "sim_type": "jaccard"
 })
 
-print(recommendations)
+# print(recommendations)
+borda = recommender.borda_count(recommendations)
+heps = sorted(list(borda.values()), key = lambda x : x['rank'], reverse = True)
+
+print(heps)
