@@ -11,10 +11,13 @@ parser.add_argument('-r', dest='n_recommendations', type=int, default=5,
     help='Number of recommendations calculated per user')
 parser.add_argument('-a', dest='algorithm',
     help='Algorithm used, "jaccard" or "pearson"', default='jaccard')
-parser.add_argument('-i', dest='ids', nargs='*')
-parser.add_argument('-p', dest='profiles', nargs='*')
-parser.add_argument('-f', dest='input_file')
-parser.add_argument('-pf', dest='profile_file')
+parser.add_argument('-i', dest='ids', nargs='*',
+    help='Use this if you want to list the ids of the users to group, list the ids separated with spaces')
+parser.add_argument('-p', dest='profiles', nargs='*',
+    help='Use this if you want to use profile file for group generation. ' +
+    'List the parameters in order COUNTRY_NAME GENDER LOWER_AGE_BOUNDARY UPPER_AGE_BOUNDARY')
+parser.add_argument('-f', dest='input_file', help='artist file filename')
+parser.add_argument('-pf', dest='profile_file', help='profile file name')
 
 args = parser.parse_args()
 
