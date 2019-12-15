@@ -6,18 +6,20 @@ def load_data(filename):
         users = {}
         for row in csv_reader:
             if row[0] in users.keys():
-                users[row[0]]['artists'].append({
+                users[row[0]]['artists'][row[1]] = {
                     "id": row[1],
                     "name": row[2],
                     "plays": int(row[3])
-                })
+                }
             else:
                 users[row[0]] = {
-                    'artists': [{
-                        "id": row[1],
-                        "name": row[2],
-                        "plays": int(row[3])
-                    }]
+                    'artists': {
+                        row[1]:  {
+                            "id": row[1],
+                            "name": row[2],
+                            "plays": int(row[3])
+                        }
+                    }
                 }
 
         return users

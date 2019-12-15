@@ -1,39 +1,10 @@
 
 def pearson(user1, user2):
-    # user1 = {
-    #     "user_id": 1,
-    #     "artists": [
-    #         {
-    #             "name": "asd",
-    #             "plays": 78
-    #         },
-    #         {
-    #             "name": "ewq",
-    #             "plays": 50
-    #         },
-    #         {
-    #             "name": "dfg",
-    #             "plays": 23
-    #         },
-    #     ]
-    # }
-    # user2 = {
-    #     "user_id": 3,
-    #     "artists": [
-    #         {
-    #             "name": "asd",
-    #             "plays": 78
-    #         },
-    #         {
-    #             "name": "dfg",
-    #             "plays": 23
-    #         }
-    #     ]
-    # }
+    common = joint(user1, user2)
+    if len(common) == 0:
+        return 0
     mean1 = mean(user1)
     mean2 = mean(user2)
-
-    common = joint(user1, user2)
 
     sums = calculateSums(common, mean1, mean2)
     try:
@@ -44,9 +15,8 @@ def pearson(user1, user2):
 def joint(user1, user2):
     common = []
     for i in user1["artists"]:
-        for j in user2["artists"]:
-            if i["name"] == j["name"]:
-                common.append([i, j])
+        if i in user2["artists"]:
+            common.append([user1['artists'][i], user2['artists'][i]])
     return common
 
 
@@ -64,8 +34,8 @@ def calculateSums(common, user1mean, user2mean):
 
 def mean(user):
     sum = 0
-    for i in user["artists"]:
-        sum = sum + i["plays"]
+    for key, val in user["artists"].items():
+        sum = sum + val["plays"]
 
     return sum/len(user["artists"])
 
