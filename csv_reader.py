@@ -1,5 +1,11 @@
 import csv
 
+def try_convert_int(str):
+    try:
+        return int(str)
+    except ValueError:
+        return 0
+
 def load_data(filename):
     with open(filename, encoding="utf8") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter='\t')
@@ -24,11 +30,11 @@ def load_data(filename):
 
         return users
 
-def load_groups(filename, users):
+def load_profiles(filename, users):
     with open(filename, encoding="utf8") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter='\t')
         for row in csv_reader:
             if row[0] in users:
                 users[row[0]]['sex'] = row[1]
-                users[row[0]]['age'] = row[2]
+                users[row[0]]['age'] = try_convert_int(row[2])
                 users[row[0]]['country'] = row[3]
