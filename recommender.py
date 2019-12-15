@@ -37,7 +37,7 @@ def neighbors(data, n, simtype):
             if len(user["neighbors"]) > n:
                 user["neighbors"].pop(index)
 
-# Get the items the users have not seen, but their neighbors have 
+# Get the items the users have not seen, but their neighbors have
 def unseen_items(data, user):
     unseen = {}
     for n_key, neighbor in user['neighbors'].items():
@@ -67,38 +67,14 @@ def predictions(data, user, unseen):
     return predict
 
 
-def generate(data, options):
+def generate(data, users, options):
     neighbors(data, options["n_similar_users"], options["sim_type"])
-    test_user = data['00035a0368fd249d286f683e816fbdc97cbfa7d9']
-    unseen = unseen_items(data, test_user)
+    recommendations = {}
+    for user_id in users:
+        user = data[user_id]
+        pred = predictions(data, user, unseen_items(data, user))
+        pred.sort(key = lambda x : x['prediction'], reverse = True)
+        recommendations[user_id] = pred 
 
-    pred = predictions(data, test_user, unseen)
-    print(pred)
-
-
-# data in the form
-# [
-#     {
-#         user_id: 12345
-#         artists: [
-#             {
-#                 listens: 12
-#                 name: 'artist1'
-#             },
-#             {
-#                 listens: 43
-#                 name: 'artist2'
-#             },
-#         ]
-#     }
-# ]
-
-data = csv_reader.load_data("tools/shortest.tsv")
-csv_reader.load_groups('tools/profile.tsv', data)
-recommendations = generate(data, {
-    "n_similar_users": 5,
-    "sim_type": "jaccard"
-})
-
-# print(recommendations)
+    return recommendations
 
