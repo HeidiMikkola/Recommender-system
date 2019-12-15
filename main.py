@@ -13,18 +13,19 @@ parser.add_argument('-a', dest='algorithm',
     help='Algorithm used, "jaccard" or "pearson"', default='jaccard')
 parser.add_argument('-i', dest='ids', nargs='*')
 parser.add_argument('-p', dest='profiles', nargs='*')
+parser.add_argument('-f', dest='input_file')
+parser.add_argument('-pf', dest='profile_file')
+
 args = parser.parse_args()
 
-data = csv_reader.load_data("tools/shortest.tsv")
-csv_reader.load_profiles('tools/profile.tsv', data)
+data = csv_reader.load_data(args.input_file)
+csv_reader.load_profiles(args.profile_file, data)
 group = []
 if args.profiles is not None:
     profiles = grouper.get_group(data, args.profiles[0], args.profiles[1], int(args.profiles[2]), int(args.profiles[3]))
     group = profiles.keys()
 elif args.ids is not None:
     group = args.ids
-
-
 
 recommendations = recommender.generate(data, group, {
     "n_similar_users": args.n_users,
