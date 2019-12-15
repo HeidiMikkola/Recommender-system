@@ -8,7 +8,7 @@ def try_convert_int(str):
 
 def load_data(filename):
     with open(filename, encoding="utf8") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter='\t')
+        csv_reader = csv.reader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
         users = {}
         for row in csv_reader:
             if row[0] in users.keys():
