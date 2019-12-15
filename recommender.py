@@ -59,8 +59,13 @@ def predictions(data, user, unseen):
             neighbor_artist = data[neighbor['id']]['artists'][artist_key]
             upper_sum += neighbor['similarity'] * ( neighbor_artist['plays'] - similarity.mean(data[neighbor['id']]) )
             lower_sum += neighbor['similarity']
+        prediction_value = 0
+        try:
+            prediction_value = similarity.mean(user) +  ( upper_sum / lower_sum )
+        except:
+            pass
         prediction = {
-            'prediction': similarity.mean(user) +  ( upper_sum / lower_sum )
+            'prediction': prediction_value
         }
         prediction.update(val[0])
         predict.append(prediction)
