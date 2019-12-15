@@ -97,7 +97,8 @@ def borda_count(users):
                 ranks[artist['id']]['rank'] += len(recommendations) - i
             else:
                 ranks[artist['id']] = {
-                    **artist,
+                    'name': artist['name'],
+                    'id': artist['id'],
                     'rank': len(recommendations) - i
                 }
 
