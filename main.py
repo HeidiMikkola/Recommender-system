@@ -1,8 +1,7 @@
 import csv_reader
 import recommender
 import grouper
-
-
+import json
 
 data = csv_reader.load_data("tools/shortest.tsv")
 csv_reader.load_profiles('tools/profile.tsv', data)
@@ -16,6 +15,6 @@ recommendations = recommender.generate(data, group.keys(), {
 
 # print(recommendations)
 borda = recommender.borda_count(recommendations)
-heps = sorted(list(borda.values()), key = lambda x : x['rank'], reverse = True)
+group_rec = sorted(list(borda.values()), key = lambda x : x['rank'], reverse = True)
 
-print(heps)
+print(json.dumps(group_rec, indent=4))
