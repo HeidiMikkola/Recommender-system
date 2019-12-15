@@ -1,4 +1,3 @@
-
 def pearson(user1, user2):
     common = joint(user1, user2)
     if len(common) == 0:
@@ -39,5 +38,8 @@ def mean(user):
 
     return sum/len(user["artists"])
 
-
+def jaccard(user1, user2):
+    common = len(joint(user1, user2))
+    return common / (len(user1["artists"]) + len(user2["artists"]) - common)
+    
 

@@ -1,4 +1,4 @@
-import pearson
+import similarity
 import csv_reader
 
 # get the farthest neighbor pf the user and its index,
@@ -14,7 +14,7 @@ def farthest_close_neighbor(user):
 
 
 # naive method for getting n amount of closest neighbors
-def neighbors(data, n):
+def neighbors(data, n, simtype):
     for user_key in data:
         user = data[user_key]
         user["neighbors"] = {}
@@ -24,11 +24,15 @@ def neighbors(data, n):
             if user_key == other_key:
                 continue
             farthest, index = farthest_close_neighbor(user)
-            similarity = pearson.pearson(user, other)
-            if len(user["neighbors"]) < n or similarity > farthest:
+            sim = None
+            if simtype == "pearson":
+                sim = similarity.pearson(user, other)
+            else:
+                sim = similarity.jaccard(user, other)
+            if len(user["neighbors"]) < n or sim > farthest:
                 user["neighbors"][other_key] = {
                     "id": other_key,
-                    "similarity": similarity
+                    "similarity": sim
                 }
             if len(user["neighbors"]) > n:
                 user["neighbors"].pop(index)
@@ -49,7 +53,7 @@ def unseen_items(data, user):
 
 
 def generate(data, options):
-    neighbors(data, options["n_similar_users"])
+    neighbors(data, options["n_similar_users"], "jaccard")
     print("NAABURIT")
     test_user = data[list(data.keys())[0]]
     print(test_user)
