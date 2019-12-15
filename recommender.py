@@ -40,28 +40,40 @@ def neighbors(data, n, simtype):
 # Get the items the users have not seen, but their neighbors have 
 def unseen_items(data, user):
     unseen = {}
-    for neighbor in user['neighbors']:
-        
-        for artist_key, artist in data[neighbor]['artists'].items():
+    for n_key, neighbor in user['neighbors'].items():
+        for artist_key, artist in data[n_key]['artists'].items():
             if artist_key not in user['artists']:
-                unseen[artist_key] = artist
+                if artist_key in unseen:
+                    unseen[artist_key].append(neighbor)
+                else:
+                    unseen[artist_key] = [artist, [neighbor]]
     return unseen
 
-# # Make a 
-# def predict():
-
+# Get predictions for a user based on the neighbors
+def predictions(data, user, unseen):
+    predict = []
+    for artist_key, val in unseen.items():
+        upper_sum = 0
+        lower_sum = 0
+        for neighbor in val[1]:
+            neighbor_artist = data[neighbor['id']]['artists'][artist_key]
+            upper_sum += neighbor['similarity'] * ( neighbor_artist['plays'] - similarity.mean(data[neighbor['id']]) )
+            lower_sum += neighbor['similarity']
+        prediction = {
+            'prediction': similarity.mean(user) +  ( upper_sum / lower_sum )
+        }
+        prediction.update(val[0])
+        predict.append(prediction)
+    return predict
 
 
 def generate(data, options):
-    neighbors(data, options["n_similar_users"], "jaccard")
-    print("NAABURIT")
-    test_user = data[list(data.keys())[0]]
-    print(test_user)
+    neighbors(data, options["n_similar_users"], options["sim_type"])
+    test_user = data['00035a0368fd249d286f683e816fbdc97cbfa7d9']
+    unseen = unseen_items(data, test_user)
 
-    
-
-    # print(data)
-
+    pred = predictions(data, test_user, unseen)
+    print(pred)
 
 
 # data in the form
@@ -84,7 +96,8 @@ def generate(data, options):
 data = csv_reader.load_data("tools/shortest.tsv")
 csv_reader.load_groups('tools/profile.tsv', data)
 recommendations = generate(data, {
-    "n_similar_users": 5
+    "n_similar_users": 5,
+    "sim_type": "jaccard"
 })
 
 # print(recommendations)
